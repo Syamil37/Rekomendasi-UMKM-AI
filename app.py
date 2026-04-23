@@ -17,7 +17,7 @@ df = load_data()
 
 # 3. Membuat Sidebar untuk Interaksi Pengguna
 st.sidebar.header("🔍 Analisis Lokasi")
-kelurahan_list = df['kelurahan'].tolist()
+kelurahan_list = sorted(df['kelurahan'].tolist())
 selected_kel = st.sidebar.selectbox("Pilih Kelurahan Target:", kelurahan_list)
 
 # Mengambil data khusus untuk kelurahan yang dipilih
@@ -51,9 +51,8 @@ st.map(df_map[df_map['kelurahan'] == selected_kel], zoom=12)
 
 # 6. Menampilkan Leaderboard (Top 10)
 st.subheader("🏆 Top 10 Lokasi Emas di Kota Ini")
-st.dataframe(
-    df[['kelurahan', 'Skor_Kelayakan', 'jumlah_penduduk', 'Jumlah_Halte_Terdekat', 'Jumlah_Kompetitor']].head(10),
-    use_container_width=True
-)
+top_10 = df[['kelurahan', 'Skor_Kelayakan', 'jumlah_penduduk', 'Jumlah_Halte_Terdekat', 'Jumlah_Kompetitor']].head(10).copy()
+top_10.index = range(1, 11) # Memaksa index dimulai dari angka 1 sampai 10
+st.dataframe(top_10, use_container_width=True)
 
 st.caption("Dibuat untuk Microsoft AI Impact Challenge 2026")
