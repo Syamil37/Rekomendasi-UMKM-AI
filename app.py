@@ -10,7 +10,7 @@ st.write("Dashboard AI untuk menemukan lokasi terbaik membuka usaha berdasarkan 
 @st.cache_data
 def load_data():
     # Pastikan file CSV ini ada di folder yang sama dengan file app.py
-    data = pd.read_csv('https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_final_umkm.csv')
+    data = pd.read_csv('https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_final_umkm_v2.csv')
     return data
 
 df = load_data()
