@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(page_title="AI Rekomendasi Lokasi UMKM", layout="wide")
 
 # 1. LOAD DATA DARI AZURE (Ganti URL di bawah dengan URL Azure barumu)
-URL_AZURE = "https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_final_umkm_v4_PERFECT.csv"
+URL_AZURE = "https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_final_umkm_v5_BISMILLAH.csv"
 
 @st.cache_data
 def load_data():
