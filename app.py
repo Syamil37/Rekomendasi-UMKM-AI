@@ -29,7 +29,21 @@ try:
 
     # Ambil data spesifik kelurahan yang dipilih
     detail_lokasi = df[df['kelurahan'] == selected_kelurahan].iloc[0]
+# --- LOGIKA AI DINAMIS (Real-Time Scoring) ---
+    # 1. Normalisasi Data (Mengubah semua angka menjadi skala 0.0 sampai 1.0 agar bisa dijumlahkan)
+    pop_norm = df['jumlah_penduduk'] / df['jumlah_penduduk'].max()
+    halte_norm = df['Jumlah_Halte_Terdekat'] / df['Jumlah_Halte_Terdekat'].max()
+    
+    # Mencegah error jika kebetulan kompetitornya 0 semua
+    max_komp = df[kategori].max()
+    komp_norm = df[kategori] / max_komp if max_komp > 0 else 0
 
+    # 2. Rumus Hitung Skor (Misal: Penduduk 50%, Akses 30%, Penalti Kompetitor 20%)
+    # Kompetitor dikurangi (-) karena semakin banyak saingan, skor kelayakan harus turun.
+    df['Skor_Dinamis'] = ((pop_norm * 0.5) + (halte_norm * 0.3) - (komp_norm * 0.2)) * 100
+    
+    # 3. Bulatkan angka dan pastikan tidak ada skor minus
+    df['Skor_Dinamis'] = df['Skor_Dinamis'].apply(lambda x: round(max(0, x), 2))
     # --- MAIN CONTENT ---
     st.title("🏆 AI Penentu Lokasi Emas UMKM")
     st.markdown(f"Menganalisis potensi untuk membuka **{kategori}** di **{selected_kelurahan}**")
@@ -50,18 +64,15 @@ try:
         'lon': [detail_lokasi['Longitude']]
     })
     st.map(map_data, zoom=14)
-
-    # --- TABEL RANKING (Perbaikan 2: Index 1-10) ---
+# --- TABEL RANKING DINAMIS ---
     st.subheader(f"🥇 Top 10 Kelurahan Terbaik untuk {kategori}")
     
-    # Sortir ulang berdasarkan Skor Kelayakan (Top 10)
-    top_10 = df.sort_values(by='Skor_Kelayakan', ascending=False).head(10).copy()
-    
-    # Reset index agar mulai dari 1
+    # Sortir ulang berdasarkan Skor Dinamis yang baru dihitung!
+    top_10 = df.sort_values(by='Skor_Dinamis', ascending=False).head(10).copy()
     top_10.index = range(1, 11)
     
-    # Tampilkan kolom yang relevan saja termasuk kategori yang dipilih
-    kolom_tampil = ['kelurahan', 'Skor_Kelayakan', 'jumlah_penduduk', 'Jumlah_Halte_Terdekat', kategori]
+    # Tampilkan tabelnya
+    kolom_tampil = ['kelurahan', 'Skor_Dinamis', 'jumlah_penduduk', 'Jumlah_Halte_Terdekat', kategori]
     st.dataframe(top_10[kolom_tampil], use_container_width=True)
 
 except Exception as e:
