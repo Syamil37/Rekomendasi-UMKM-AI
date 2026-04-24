@@ -4,7 +4,7 @@ import pandas as pd
 # Konfigurasi Halaman
 st.set_page_config(page_title="AI Rekomendasi Lokasi UMKM", layout="wide")
 
-# 1. LOAD DATA DARI AZURE (Ganti URL di bawah dengan URL Azure barumu)
+# 1. LOAD DATA DARI AZURE 
 URL_AZURE = "https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_versi_6.csv"
 
 @st.cache_data
@@ -18,7 +18,7 @@ try:
     # --- SIDEBAR: ANALISIS LOKASI ---
     st.sidebar.header("🔍 Analisis Lokasi")
     
-    # Perbaikan 3: Urutan Abjad pada Dropdown
+    # Urutan Abjad pada Dropdown
     kelurahan_list = sorted(df['kelurahan'].unique())
     selected_kelurahan = st.sidebar.selectbox("Pilih Kelurahan Target:", kelurahan_list)
 
@@ -27,9 +27,7 @@ try:
     st.sidebar.header("🏪 Kategori Bisnis")
     kategori = st.sidebar.radio("Pilih Jenis UMKM:", ["Cafe", "Minimarket", "Apotek", "Laundry"])
 
-    # Ambil data spesifik kelurahan yang dipilih
-    detail_lokasi = df[df['kelurahan'] == selected_kelurahan].iloc[0]
-# --- LOGIKA AI DINAMIS (Real-Time Scoring) ---
+    # --- LOGIKA AI DINAMIS (Real-Time Scoring) ---
     # 1. Normalisasi Data (Mengubah semua angka menjadi skala 0.0 sampai 1.0 agar bisa dijumlahkan)
     pop_norm = df['jumlah_penduduk'] / df['jumlah_penduduk'].max()
     halte_norm = df['Jumlah_Halte_Terdekat'] / df['Jumlah_Halte_Terdekat'].max()
@@ -44,6 +42,10 @@ try:
     
     # 3. Bulatkan angka dan pastikan tidak ada skor minus
     df['Skor_Dinamis'] = df['Skor_Dinamis'].apply(lambda x: round(max(0, x), 2))
+
+    # ---> AMBIL DATA KELURAHAN SETELAH SKOR DIHITUNG <---
+    detail_lokasi = df[df['kelurahan'] == selected_kelurahan].iloc[0]
+
     # --- MAIN CONTENT ---
     st.title("🏆 AI Penentu Lokasi Emas UMKM")
     st.markdown(f"Menganalisis potensi untuk membuka **{kategori}** di **{selected_kelurahan}**")
@@ -51,20 +53,21 @@ try:
     # Kolom Statistik Utama
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("Skor Kelayakan", f"{detail_lokasi['Skor_Kelayakan']:.2f}/100")
+        st.metric("Skor Kelayakan", f"{detail_lokasi['Skor_Dinamis']:.2f}/100")
     with col2:
         st.metric("Populasi Penduduk", f"{int(detail_lokasi['jumlah_penduduk']):,}")
     with col3:
         st.metric(f"Jumlah {kategori} Saat Ini", f"{int(detail_lokasi[kategori])} kompetitor")
 
-    # --- PETA (Sekarang Akurat dengan Lat/Long Asli) ---
+    # --- PETA ---
     st.subheader("📍 Titik Koordinat Kelurahan")
     map_data = pd.DataFrame({
         'lat': [detail_lokasi['Latitude']],
         'lon': [detail_lokasi['Longitude']]
     })
     st.map(map_data, zoom=14)
-# --- TABEL RANKING DINAMIS ---
+
+    # --- TABEL RANKING DINAMIS ---
     st.subheader(f"🥇 Top 10 Kelurahan Terbaik untuk {kategori}")
     
     # Sortir ulang berdasarkan Skor Dinamis yang baru dihitung!
