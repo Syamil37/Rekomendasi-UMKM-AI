@@ -2,7 +2,11 @@ import streamlit as st
 import pandas as pd
 
 # Konfigurasi Halaman
-st.set_page_config(page_title="AI Rekomendasi Lokasi UMKM", layout="wide")
+st.set_page_config(
+    page_title="AI Rekomendasi Lokasi UMKM", 
+    layout="wide",
+    initial_sidebar_state="expanded"  # <-- Tambahkan kode ini
+)
 
 # Menyembunyikan menu default dan footer Streamlit
 hide_st_style = """
