@@ -4,6 +4,16 @@ import pandas as pd
 # Konfigurasi Halaman
 st.set_page_config(page_title="AI Rekomendasi Lokasi UMKM", layout="wide")
 
+# Menyembunyikan menu default dan footer Streamlit
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 # 1. LOAD DATA DARI AZURE 
 URL_AZURE = "https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_versi_6.csv"
 
