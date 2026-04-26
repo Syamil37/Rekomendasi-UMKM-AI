@@ -27,23 +27,33 @@ try:
     st.sidebar.header("🏪 Kategori Bisnis")
     kategori = st.sidebar.radio("Pilih Jenis UMKM:", ["Cafe", "Minimarket", "Apotek", "Laundry"])
 
-    # --- LOGIKA AI DINAMIS (Real-Time Scoring) ---
-    # 1. Normalisasi Data (Mengubah semua angka menjadi skala 0.0 sampai 1.0 agar bisa dijumlahkan)
-    pop_norm = df['jumlah_penduduk'] / df['jumlah_penduduk'].max()
-    halte_norm = df['Jumlah_Halte_Terdekat'] / df['Jumlah_Halte_Terdekat'].max()
+# --- LOGIKA AI DINAMIS (Real-Time Scoring: MIN-MAX SCALER) ---
     
-    # Mencegah error jika kebetulan kompetitornya 0 semua
-    max_komp = df[kategori].max()
-    komp_norm = df[kategori] / max_komp if max_komp > 0 else 0
+    # 1. Fungsi Helper Min-Max (Mengubah angka jadi rentang 0.0 sampai 1.0)
+    def min_max_scaling(column):
+        if column.max() == column.min():
+            return column * 0
+        return (column - column.min()) / (column.max() - column.min())
 
-    # 2. Rumus Hitung Skor (Misal: Penduduk 50%, Akses 30%, Penalti Kompetitor 20%)
-    # Kompetitor dikurangi (-) karena semakin banyak saingan, skor kelayakan harus turun.
-    df['Skor_Dinamis'] = ((pop_norm * 0.5) + (halte_norm * 0.3) - (komp_norm * 0.2)) * 100
-    
-    # 3. Bulatkan angka dan pastikan tidak ada skor minus
-    df['Skor_Dinamis'] = df['Skor_Dinamis'].apply(lambda x: round(max(0, x), 2))
+    # 2. Normalisasi setiap variabel secara adil
+    pop_norm = min_max_scaling(df['jumlah_penduduk'])
+    halte_norm = min_max_scaling(df['Jumlah_Halte_Terdekat'])
+
+    # 3. Khusus kompetitor, dibalik (1 - nilai) karena saingan sedikit itu bagus
+    komp_norm = 1 - min_max_scaling(df[kategori]) 
+
+    # 4. Hitung Skor Gabungan (Bobot: Populasi 50%, Akses 30%, Kelangkaan Saingan 20%)
+    skor_raw = (pop_norm * 0.5) + (halte_norm * 0.3) + (komp_norm * 0.2)
+
+    # 5. Transformasi akhir ke skala 0-100 agar ada yang mendapat nilai 100 sempurna
+    df['Skor_Dinamis'] = min_max_scaling(skor_raw) * 100
+
+    # 6. Pembulatan angka agar tabel terlihat rapi
+    df['Skor_Dinamis'] = df['Skor_Dinamis'].round(2)
 
     # ---> AMBIL DATA KELURAHAN SETELAH SKOR DIHITUNG <---
+    # ---> AMBIL DATA KELURAHAN SETELAH SKOR DIHITUNG <---
+    
     detail_lokasi = df[df['kelurahan'] == selected_kelurahan].iloc[0]
 
     # --- MAIN CONTENT ---
