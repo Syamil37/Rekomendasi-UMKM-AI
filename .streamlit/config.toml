@@ -1,0 +1,15 @@
+[theme]
+# Warna aksen utama (Gunakan warna Biru Profesional)
+primaryColor = "#0078D4" 
+
+# Warna latar belakang utama (Hitam Elegan / Dark Mode)
+backgroundColor = "#0E1117" 
+
+# Warna latar belakang sidebar dan kartu menu
+secondaryBackgroundColor = "#1F232B" 
+
+# Warna teks
+textColor = "#FAFAFA" 
+
+# Jenis font
+font = "sans serif"
