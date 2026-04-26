@@ -75,15 +75,18 @@ try:
     st.title("AI Penentu Lokasi Optimal Membuka UMKM")
     st.markdown(f"Menganalisis potensi untuk membuka **{kategori}** di **{selected_kelurahan}**")
 
-    # Kolom Statistik Utama
-    col1, col2, col3 = st.columns(3)
+# Kolom Statistik Utama (Diubah menjadi 4 kolom)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("Skor Kelayakan", f"{detail_lokasi['Skor_Dinamis']:.2f}/100")
     with col2:
         st.metric("Populasi Penduduk", f"{int(detail_lokasi['jumlah_penduduk']):,}")
     with col3:
+        # Menambahkan metrik Halte di sini
+        st.metric("Akses Halte Terdekat", f"{int(detail_lokasi['Jumlah_Halte_Terdekat'])} halte")
+    with col4:
         st.metric(f"Jumlah {kategori} Saat Ini", f"{int(detail_lokasi[kategori])} kompetitor")
-
+        
     # --- PETA ---
     st.subheader("📍 Titik Koordinat Kelurahan")
     map_data = pd.DataFrame({
