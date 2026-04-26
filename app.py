@@ -8,12 +8,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"  # <-- Tambahkan kode ini
 )
 
-# Menyembunyikan menu default dan footer Streamlit
+# Menyembunyikan footer dan menu bawaan, tapi TETAP MEMBIARKAN tombol Sidebar
 hide_st_style = """
             <style>
-            #MainMenu {visibility: hidden;}
+            /* Sembunyikan garis menu 'tiga titik' di kanan atas */
+            [data-testid="stToolbar"] {visibility: hidden;}
+            
+            /* Sembunyikan tulisan 'Made with Streamlit' di bawah */
             footer {visibility: hidden;}
-            header {visibility: hidden;}
+            
+            /* Sembunyikan ruang kosong di atas agar aplikasi lebih padat, tapi jangan sembunyikan panah sidebar */
+            .block-container {padding-top: 2rem;}
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
