@@ -69,7 +69,7 @@ try:
     detail_lokasi = df[df['kelurahan'] == selected_kelurahan].iloc[0]
 
     # --- MAIN CONTENT ---
-    st.title("🏆 AI Penentu Lokasi Emas UMKM")
+    st.title("AI Penentu Lokasi Optimal Membuka UMKM")
     st.markdown(f"Menganalisis potensi untuk membuka **{kategori}** di **{selected_kelurahan}**")
 
     # Kolom Statistik Utama
@@ -90,7 +90,7 @@ try:
     st.map(map_data, zoom=14)
 
     # --- TABEL RANKING DINAMIS ---
-    st.subheader(f"🥇 Top 10 Kelurahan Terbaik untuk {kategori}")
+    st.subheader(f"Top 10 Kelurahan Terbaik untuk {kategori}")
     
     # Sortir ulang berdasarkan Skor Dinamis yang baru dihitung!
     top_10 = df.sort_values(by='Skor_Dinamis', ascending=False).head(10).copy()
