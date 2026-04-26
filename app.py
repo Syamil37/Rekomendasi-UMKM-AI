@@ -16,6 +16,8 @@ try:
     df = load_data()
 
     # --- SIDEBAR: ANALISIS LOKASI ---
+    st.sidebar.image("logo_umkm.png", use_container_width=True)
+    
     st.sidebar.header("🔍 Analisis Lokasi")
     
     # Urutan Abjad pada Dropdown
