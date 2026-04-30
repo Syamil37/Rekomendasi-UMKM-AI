@@ -18,7 +18,7 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 # 1. LOAD DATA DARI AZURE 
-URL_AZURE = "https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_versi_6.csv"
+URL_AZURE = "https://dataumkmsyamil.blob.core.windows.net/dataset-lomba/data_versi_8_PURE_REAL.csv"
 
 @st.cache_data
 def load_data():
@@ -40,7 +40,7 @@ try:
     # Fitur Baru: Pilih Kategori UMKM
     st.sidebar.markdown("---")
     st.sidebar.header("🏪 Kategori Bisnis")
-    kategori = st.sidebar.radio("Pilih Jenis UMKM:", ["Cafe", "Minimarket", "Apotek", "Laundry"])
+kategori = st.selectbox("Pilih Kategori Bisnis:", ["Minimarket", "Apotek"])
 
 # --- LOGIKA AI DINAMIS (Real-Time Scoring: MIN-MAX SCALER) ---
     
