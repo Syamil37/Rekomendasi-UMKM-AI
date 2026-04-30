@@ -45,7 +45,7 @@ try:
     Data populasi, fasilitas umum (halte), dan lokasi UMKM yang digunakan pada aplikasi ini bersumber resmi dari **Open Data Pemerintah Provinsi DKI Jakarta**. 
     """)
 
-    st.sidebar.caption("© 2026 | Dikembangkan oleh OptiLocate")
+    st.sidebar.caption("© 2026 | Dikembangkan oleh Tim Kompas")
     
     def min_max_scaling(column):
         if column.max() == column.min():
