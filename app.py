@@ -7,6 +7,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Tambahkan kode ini untuk verifikasi kepemilikan lomba
+st.markdown(
+    '<meta name="dicoding:email" content="syamil.haniyyah3@gmail.com">',
+    unsafe_allow_html=True
+)
+
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
