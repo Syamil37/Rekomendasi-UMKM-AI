@@ -40,9 +40,11 @@ try:
     # Fitur Baru: Pilih Kategori UMKM
     st.sidebar.markdown("---")
     st.sidebar.header("🏪 Kategori Bisnis")
-kategori = st.selectbox("Pilih Kategori Bisnis:", ["Minimarket", "Apotek"])
+    
+    # PERBAIKAN: Indentasi dirapikan dan ditambahkan 'st.sidebar'
+    kategori = st.sidebar.selectbox("Pilih Kategori Bisnis:", ["Minimarket", "Apotek"])
 
-# --- LOGIKA AI DINAMIS (Real-Time Scoring: MIN-MAX SCALER) ---
+    # --- LOGIKA AI DINAMIS (Real-Time Scoring: MIN-MAX SCALER) ---
     
     # 1. Fungsi Helper Min-Max (Mengubah angka jadi rentang 0.0 sampai 1.0)
     def min_max_scaling(column):
@@ -67,22 +69,19 @@ kategori = st.selectbox("Pilih Kategori Bisnis:", ["Minimarket", "Apotek"])
     df['Skor_Dinamis'] = df['Skor_Dinamis'].round(2)
 
     # ---> AMBIL DATA KELURAHAN SETELAH SKOR DIHITUNG <---
-    # ---> AMBIL DATA KELURAHAN SETELAH SKOR DIHITUNG <---
-    
     detail_lokasi = df[df['kelurahan'] == selected_kelurahan].iloc[0]
 
     # --- MAIN CONTENT ---
     st.title("AI Penentu Lokasi Optimal Membuka UMKM")
     st.markdown(f"Menganalisis potensi untuk membuka **{kategori}** di **{selected_kelurahan}**")
 
-# Kolom Statistik Utama (Diubah menjadi 4 kolom)
+    # Kolom Statistik Utama (Diubah menjadi 4 kolom)
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("Skor Kelayakan", f"{detail_lokasi['Skor_Dinamis']:.2f}/100")
     with col2:
         st.metric("Populasi Penduduk", f"{int(detail_lokasi['jumlah_penduduk']):,}")
     with col3:
-        # Menambahkan metrik Halte di sini
         st.metric("Akses Halte Terdekat", f"{int(detail_lokasi['Jumlah_Halte_Terdekat'])} halte")
     with col4:
         st.metric(f"Jumlah {kategori} Saat Ini", f"{int(detail_lokasi[kategori])} kompetitor")
