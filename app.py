@@ -46,9 +46,18 @@ try:
     st.sidebar.markdown("---")
     st.sidebar.header("🏪 Kategori Bisnis")
     
-    # PERBAIKAN: Indentasi dirapikan dan ditambahkan 'st.sidebar'
+    # ... (kode st.sidebar sebelumnya, seperti st.sidebar.header dan selectbox) ...
     kategori = st.sidebar.selectbox("Pilih Kategori Bisnis:", ["Minimarket", "Apotek"])
 
+    # === TAMBAHAN: INFORMASI & LEGALITAS DATA ===
+    st.sidebar.markdown("---")
+    st.sidebar.info("""
+    **Tentang Data:**
+    Data populasi, fasilitas umum (halte), dan lokasi UMKM yang digunakan pada aplikasi ini bersumber resmi dari **Open Data Pemerintah Provinsi DKI Jakarta**. 
+    """)
+
+    # === TAMBAHAN: CREDIT TITLE ===
+    st.sidebar.caption("© 2026 | Dikembangkan oleh OptiLocate")
     # --- LOGIKA AI DINAMIS (Real-Time Scoring: MIN-MAX SCALER) ---
     
     # 1. Fungsi Helper Min-Max (Mengubah angka jadi rentang 0.0 sampai 1.0)
