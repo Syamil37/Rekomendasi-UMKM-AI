@@ -28,7 +28,12 @@ def load_data():
 try:
     df = load_data()
 
-    # --- SIDEBAR: ANALISIS LOKASI ---
+# --- SIDEBAR: ANALISIS LOKASI ---
+    
+    # 1. Tambahkan Judul Proyek di sini (Posisi Center)
+    st.sidebar.markdown("<h1 style='text-align: center;'>OptiLocate</h1>", unsafe_allow_html=True)
+    
+    # 2. Logo yang sudah ada di bawahnya
     st.sidebar.image("logo_datathon-removebg-preview.png", use_container_width=True)
     
     st.sidebar.header("🔍 Analisis Lokasi")
